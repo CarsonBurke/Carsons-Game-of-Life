@@ -115,18 +115,18 @@ function runBatch(players) {
 
         //
 
+        if (player.playersInRange < 2) player.health -= 0.01
+
+        //
+
         player.health -= 0.01 + playersInRange * 0.0001
 
         if (player.health <= 0) player.kill()
 
-        const reproductionChance = Math.random() * playersInRange
-
-        // if (reproductionChance > 40) player.health -= playersInRange * 0.01
-
-        if (reproductionChance > 5) {
+        if (playersInRange > 10 && playersInRange < 40) {
 
             player.reproduceAttempt(tick, players.length)
-        }   
+        }
     }
 }
 

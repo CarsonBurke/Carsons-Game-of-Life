@@ -39,7 +39,7 @@ Player.prototype.createNetwork = function(inputs, outputs) {
 
     // Create layers
 
-    const layerCount = 3
+    const layerCount = 2
 
     for (let i = 0; i < layerCount; i++) network.addLayer({})
 
@@ -146,7 +146,7 @@ Player.prototype.findPlayersInRange = function(players) {
         // Find distance between players, iterate if over 200
 
         const distance = findDistance(player, otherPlayer)
-        if (distance > 200) continue
+        if (distance > 100) continue
 
         // Add 1 to playersInRangeAmount
 
@@ -154,4 +154,23 @@ Player.prototype.findPlayersInRange = function(players) {
     }
 
     return playersInRangeAmount
+}
+
+Player.prototype.age = function() {
+
+    const player = this
+
+    player.health -= 0.01
+}
+
+Player.prototype.applyMapBorders = function() {
+
+    const player = this
+
+    // Apply map borders
+
+    if (player.left <= 0) return true
+    if (player.left + player.width >= map.el.width) return true
+    if (player.top <= 0) return true
+    if (player.top + player.height >= map.el.height) return true
 }

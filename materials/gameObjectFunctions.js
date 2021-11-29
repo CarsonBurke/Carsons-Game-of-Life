@@ -16,12 +16,35 @@ GameObject.prototype.move = function(x, y) {
     const gameObject = this
 
     // Apply map borders
-    
-    if (x <= 0) return
-    if (x + gameObject.width >= map.el.width) return
 
-    if (y <= 0) return
-    if (y + gameObject.height >= map.el.height) return
+    applyMapBorders()
+
+    function applyMapBorders() {
+
+        if (x <= 0) {
+
+            x = 0
+            return
+        }
+
+        if (x + gameObject.width >= map.el.width) {
+
+            x = map.el.width - gameObject.width
+            return
+        }
+    
+        if (y <= 0) {
+
+            y = 0
+            return
+        }
+
+        if (y + gameObject.height >= map.el.height) {
+
+            y = map.el.height - gameObject.height
+            return
+        }
+    }
 
     //
     

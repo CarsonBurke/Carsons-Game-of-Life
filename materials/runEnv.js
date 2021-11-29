@@ -37,7 +37,7 @@ function runBatch(players) {
         player.inputs = inputs
 
         const outputs = [
-            { name: 'Move forward' },
+            /* { name: 'Move forward' }, */
             { name: 'Rotate clockwise' },
             { name: 'Rotate counter-clockwise' },
         ]
@@ -50,6 +50,10 @@ function runBatch(players) {
         // Run network
 
         player.network.forwardPropagate(inputs)
+
+        //
+
+        let moved = false
 
         //
 
@@ -77,20 +81,22 @@ function runBatch(players) {
 
                 // Take action connected to output
 
-                if (i == 0) {
+                /* if (i == 0) {
 
                     let left = player.left + player.speed * Math.cos(player.angle)
                     let top = player.top + player.speed * Math.sin(player.angle)
                     
                     player.move(left, top)
+
+                    moved = true
                     continue
-                }
-                if (i == 1) {
+                } */
+                if (i == 0) {
 
                     player.rotateClockwise()
                     break
                 }
-                if (i == 2) {
+                if (i == 1) {
 
                     player.rotateCounterClockwise()
                     break
@@ -98,14 +104,33 @@ function runBatch(players) {
             }
         }
 
+        // Move player
+
+        let left = player.left + player.speed * Math.cos(player.angle)
+        let top = player.top + player.speed * Math.sin(player.angle)
+        
+        player.move(left, top)
+
+        //
+
         if (Object.keys(game.objects.player).length == 1) return
 
-        if (playersInRange <= 1) player.health -= 0.5
-        if (playersInRange > 30) player.health -= 0.5
+        // 
+
+        if(player.applyMapBorders()) player.kill()
+
+        //
+
+        player.health -= 0.01 + playersInRange * 0.002
 
         if (player.health <= 0) player.kill()
 
-        if (playersInRange <= 4) player.reproduceAttempt(tick, players.length)
+        const reproductionChance = Math.random() * playersInRange
+
+        if (reproductionChance > 5) {
+
+            player.reproduceAttempt(tick, players.length)
+        }   
     }
 }
 
@@ -130,7 +155,7 @@ function bestPlayerManager(players) {
 
             const duplicateNetwork = bestPlayer.network.clone(bestPlayer.inputs, bestPlayer.outputs)
 
-            game.createPlayer(80 + 38 / 2, 80, 90, duplicateNetwork.learn(), 0)
+            game.createPlayer(randomValue(38, map.el.width - 38 * 2), randomValue(20, map.el.height - 58 * 2), 90, duplicateNetwork.learn(), 0)
         }
 
         return

@@ -29,20 +29,6 @@ Player.prototype.kill = function() {
     player.delete()
 }
 
-Player.prototype.findClosestFood = function(food) {
-
-    const player = this
-
-    // Sort food by distance from player
-
-    const foodByDistance = food.sort((a, b) => findDistance(a, player) - findDistance(b, player))
-
-    // Set closestFood as first in foodByDistance and inform it
-
-    const closestFood = foodByDistance[0]
-    return closestFood
-}
-
 Player.prototype.createNetwork = function(inputs, outputs) {
 
     const player = this
@@ -129,25 +115,13 @@ Player.prototype.reproduceAttempt = function(tick, playersCount) {
 
     const player = this
 
-    // Stop if there aren't enough players
+    // Stop if there are too many players
 
     if (playersCount >= maxPlayers) {
 
         player.lastBirth = tick
         return
     }
-
-    // Stop if player doesn't have enough food
-
-    if (player.food == 0) {
-
-        player.lastBirth = tick
-        return
-    }
-
-    // If birthing is on delay, stop
-
-    if (tick - player.lastBirth < player.birthDelay) return
 
     const game = player.findGame()
 
@@ -159,39 +133,6 @@ Player.prototype.reproduceAttempt = function(tick, playersCount) {
     // Create player with network
 
     game.createPlayer(player.left + player.width / 2, player.top + player.height / 2, player.angle, duplicateNetwork, tick)
-
-    // Take food
-
-    player.food -= 1
-
-    player.lastBirth = tick
-}
-
-Player.prototype.eatAttempt = function(closestFood) {
-
-    const player = this
-
-    // If player is inside closestFood
-
-    if (closestFood && findDistance(player, closestFood) - closestFood.width * 2 <= 0) {
-    
-        // Delete food and add score the player
-
-        player.score += 1
-        player.food += 10
-        player.health += player.ageAmount * 500
-        closestFood.delete()
-    }
-}
-
-Player.prototype.age = function() {
-
-    const player = this
-    
-    // Remove health as if to age player, kill if out of health
-
-    player.health -= player.ageAmount
-    if (player.health <= 0) player.kill()
 }
 
 Player.prototype.findPlayersInRange = function(players) {

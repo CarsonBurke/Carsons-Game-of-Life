@@ -1,6 +1,5 @@
 let tick = 0
 let playerCount = 0
-let bestScore = 0
 
 function runTick() {
 
@@ -11,8 +10,7 @@ function runTick() {
     const players = Object.values(game.objects.player)
     playerCount = players.length
 
-    runBatch(players, food)
-    foodManager(food)
+    runBatch(players)
 
     bestPlayerManager(players)
 
@@ -28,10 +26,12 @@ function runBatch(players) {
 
         /* const distanceFromClosestFood = closestFood ? findDistance(player, closestFood) : 0 */
         
+        const playersInRange = player.findPlayersInRange(players)
+
         const inputs = [
             {
                 name: 'Players in range',
-                value: findPlayersInRange
+                value: playersInRange
             },
         ]
         player.inputs = inputs
@@ -100,11 +100,12 @@ function runBatch(players) {
 
         if (Object.keys(game.objects.player).length == 1) return
 
-        player.age()
+        if (playersInRange <= 1) player.health -= 0.5
+        if (playersInRange > 30) player.health -= 0.5
 
-        player.eatAttempt(closestFood)
+        if (player.health <= 0) player.kill()
 
-        player.reproduceAttempt(tick, players.length)
+        if (playersInRange <= 4) player.reproduceAttempt(tick, players.length)
     }
 }
 
@@ -151,7 +152,6 @@ function display() {
     const displayValues = {
         tick: tick,
         playerCount, playerCount,
-        bestScore: bestScore,
     }
 
     // Loop through displayValues

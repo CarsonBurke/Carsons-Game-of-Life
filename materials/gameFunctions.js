@@ -21,8 +21,8 @@ Game.prototype.createPlayer = function(left, top, degree, network, tick) {
 
     const player = new Player({
         type: "player",
-        left: left - width * 0.5,
-        top: top - height * 0.5,
+        left: randomValue(left - width * 0.5 , map.el.width - width),
+        top: randomValue(left - height * 0.5 , map.el.height - height),
         width: width,
         height: height,
         imageID: 'player',

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="materials/style.css">
+    <title>Carson's Game of Life</title>
+</head>
+
+<body>
+
+    <!-- Display -->
+
+    <div class="displayParent">
+
+        <h3 class="displayHeader">Tick: <strong id="tick">0</strong></h3>
+        <h3 class="displayHeader">Players: <strong id="playerCount">0</strong></h3>
+        <h3 class="displayHeader">Best score: <strong id="bestScore">0</strong></h3>
+
+    </div>
+
+    <!-- Sprites -->
+
+    <img src="materials/images/player.png" alt="" class="hide" id="player">
+    <img src="materials/images/food.png" alt="" class="hide" id="food">
+
+    <!-- Canvas -->
+
+    <canvas class="map" id="map"></canvas>
+
+    <!-- JS imports -->
+
+    <script src="materials/globalVars.js"></script>
+    <script src="materials/globalFunctions.js"></script>
+
+    <script src="materials/game.js"></script>
+    <script src="materials/gameFunctions.js"></script>
+    <script src="materials/gameObjects.js"></script>
+    <script src="materials/gameObjectFunctions.js"></script>
+
+    <script src="materials/playerFunctions.js"></script>
+    <script src="materials/foodFunctions.js"></script>
+
+    <!-- neuralNetwork imports -->
+
+    <script src="materials/neuralNetwork/networkManager.js"></script>
+    <script src="materials/neuralNetwork/networkComponents.js"></script>
+    <script src="materials/neuralNetwork/networkFunctions.js"></script>
+    <script src="materials/neuralNetwork/layerFunctions.js"></script>
+    <script src="materials/neuralNetwork/perceptronFunctions.js"></script>
+    <script src="materials/neuralNetwork/lineFunctions.js"></script>
+
+    <!--  -->
+
+    <script src="materials/initEnv.js"></script>
+    <script src="materials/runEnv.js"></script>
+    <script src="materials/index.js"></script>
+
+</body>
+
+</html>

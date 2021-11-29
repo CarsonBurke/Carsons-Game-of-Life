@@ -3,7 +3,7 @@
 let properties = {
     mapWidth: 900,
     mapHeight: 700,
-    startingPlayers: 200,
+    startingPlayers: 500,
     maxPlayers: 100,
     minFood: 10,
     nextId: 0,

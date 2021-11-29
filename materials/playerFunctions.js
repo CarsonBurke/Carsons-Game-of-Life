@@ -146,7 +146,7 @@ Player.prototype.findPlayersInRange = function(players) {
         // Find distance between players, iterate if over 200
 
         const distance = findDistance(player, otherPlayer)
-        if (distance > 100) continue
+        if (distance > 150) continue
 
         // Add 1 to playersInRangeAmount
 

@@ -18,6 +18,15 @@ function runTick() {
     animate()
 }
 
+function findClosestPlayer(player, players) {
+
+    players = players.filter(otherPlayer => otherPlayer.id != player.id)
+
+    const playersByDistance = players.sort((a, b) => findDistance(player, a) - findDistance(player, b))
+    playersByDistance.reverse()
+    return playersByDistance[0]
+}
+
 function runBatch(players) {
 
     const game = games[Object.keys(games)[0]]
@@ -37,7 +46,6 @@ function runBatch(players) {
         player.inputs = inputs
 
         const outputs = [
-            /* { name: 'Move forward' }, */
             { name: 'Rotate clockwise' },
             { name: 'Rotate counter-clockwise' },
         ]
@@ -50,10 +58,6 @@ function runBatch(players) {
         // Run network
 
         player.network.forwardPropagate(inputs)
-
-        //
-
-        let moved = false
 
         //
 
@@ -81,16 +85,6 @@ function runBatch(players) {
 
                 // Take action connected to output
 
-                /* if (i == 0) {
-
-                    let left = player.left + player.speed * Math.cos(player.angle)
-                    let top = player.top + player.speed * Math.sin(player.angle)
-                    
-                    player.move(left, top)
-
-                    moved = true
-                    continue
-                } */
                 if (i == 0) {
 
                     player.rotateClockwise()
@@ -121,11 +115,13 @@ function runBatch(players) {
 
         //
 
-        player.health -= 0.01 + playersInRange * 0.002
+        player.health -= 0.01 + playersInRange * 0.0001
 
         if (player.health <= 0) player.kill()
 
         const reproductionChance = Math.random() * playersInRange
+
+        // if (reproductionChance > 40) player.health -= playersInRange * 0.01
 
         if (reproductionChance > 5) {
 

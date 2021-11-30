@@ -32,78 +32,8 @@ function runBatch(players) {
     const game = games[Object.keys(games)[0]]
 
     for (const player of players) {
-
-        /* const distanceFromClosestFood = closestFood ? findDistance(player, closestFood) : 0 */
         
         const playersInRange = player.findPlayersInRange(players)
-
-        const inputs = [
-            {
-                name: 'Players in range',
-                value: playersInRange
-            },
-        ]
-        player.inputs = inputs
-
-        const outputs = [
-            { name: 'Rotate clockwise' },
-            { name: 'Rotate counter-clockwise' },
-        ]
-        player.outputs = outputs
-
-        // Create network if player doesn't have one
-
-        if (!player.network) player.createNetwork(inputs, outputs)
-
-        // Run network
-
-        player.network.forwardPropagate(inputs)
-
-        //
-
-        player.network.visualsParent.classList.remove('visualsParentShow')
-
-        // Find last layer
-
-        const lastLayer = player.network.layers[Object.keys(player.network.layers).length - 1]
-
-        // Track iterations and loop through output perceptrons
-
-        let i = -1
-
-        for (const perceptronName in lastLayer.perceptrons) {
-
-            const perceptron = lastLayer.perceptrons[perceptronName]
-
-            // Record iteration
-
-            i++
-
-            // Iterate if output is 0
-
-            if (perceptron.activateValue > 0) {
-
-                // Take action connected to output
-
-                if (i == 0) {
-
-                    player.rotateClockwise()
-                    break
-                }
-                if (i == 1) {
-
-                    player.rotateCounterClockwise()
-                    break
-                }
-            }
-        }
-
-        // Move player
-
-        let left = player.left + player.speed * Math.cos(player.angle)
-        let top = player.top + player.speed * Math.sin(player.angle)
-        
-        player.move(left, top)
 
         //
 
@@ -115,11 +45,13 @@ function runBatch(players) {
 
         //
 
-        player.health -= 0.01
+
+        player.age()
+        player.health -= playersInRange * 0.1
 
         if (player.health <= 0) player.kill()
 
-        if (playersInRange > 10 && playersInRange < 40) {
+        if (playersInRange > 1 && playersInRange < 3) {
 
             player.reproduceAttempt(tick, players.length)
         }
@@ -145,19 +77,13 @@ function bestPlayerManager(players) {
     if (players.length == 1) {
         for (let i = 0; i < startingPlayers; i++) {
 
-            const duplicateNetwork = bestPlayer.network.clone(bestPlayer.inputs, bestPlayer.outputs)
-
-            game.createPlayer(randomValue(38, map.el.width - 38 * 2), randomValue(20, map.el.height - 58 * 2), 90, duplicateNetwork.learn(), 0)
+            game.createPlayer(randomValue(38, map.el.width - 38 * 2), randomValue(20, map.el.height - 58 * 2), 0, undefined, 0)
         }
 
         return
     }
 
     //
-
-    bestPlayer.network.updateVisuals(bestPlayer.inputs, bestPlayer.outputs)
-
-    bestPlayer.network.visualsParent.classList.add('visualsParentShow')
 
     // If bestPlayer's score is is more than bestScore set bestScore to bestPlayer's score
 
@@ -212,12 +138,6 @@ function animate() {
         for (const id in objects[type]) {
 
             const object = objects[type][id]
-
-            if (type == 'player') {
-
-                object.rotate()
-                continue
-            }
 
             object.draw()
         }

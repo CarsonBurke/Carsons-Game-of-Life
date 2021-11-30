@@ -19,6 +19,6 @@ function init() {
 
     for (let i = 0; i < startingPlayers; i++) {
 
-        game.createPlayer(randomValue(38, map.el.width - 38 * 2), randomValue(20, map.el.height - 58 * 2), 90, undefined, 0)
+        game.createPlayer(randomValue(38, map.el.width - 38 * 2), randomValue(20, map.el.height - 58 * 2), 0, undefined, 0)
     }
 }
